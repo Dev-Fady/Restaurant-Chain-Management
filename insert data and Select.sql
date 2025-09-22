@@ -9,9 +9,11 @@ INSERT INTO Cities(Name) VALUES
 -- (2) Branches
 -- نضع قيم StockId مبدئياً (سننشئ الـ Stocks بنفس الـ Ids لاحقًا)
 INSERT INTO Branches (Name, CityId, ManagerId, StockId) VALUES
-('Main Branch - Downtown', 1, NULL, 1),
-('West Branch', 2, NULL, 2),
-('North Branch', 3, NULL, 3);
+(N'فرع القاهرة',1,1,1)
+
+--('Main Branch - Downtown', 1, NULL, 1),
+--('West Branch', 2, NULL, 2),
+--('North Branch', 3, NULL, 3);
 
 -- (3) Stocks
 -- Stock.BranchId تشير للـ Branchs التي أُنشئت أعلاه
@@ -59,6 +61,41 @@ INSERT INTO FavoriteProducts (ProductId, AddedDate) VALUES
 (2, GETDATE()),
 (4, GETDATE());
 
+------------------------
+
+INSERT INTO Offers (Name, Des, Price, StartDate, EndDate)
+VALUES 
+(N'عرض رمضان', N'بيتزا كبيرة + بيبسي', 120.00, '2025-03-01', '2025-03-31'),
+(N'عرض الصيف',N'برجر + بطاطس + مشروب', 85.00, '2025-06-01', '2025-06-30'),
+(N'عرض العيلة', N'2 بيتزا وسط + 1 لتر بيبسي', 200.00, '2025-07-01', '2025-07-15');
+
+-- ربط العروض بالفروع (OfferStock)
+INSERT INTO OfferStocks (Name, OfferId, BranchId, Quantity)
+VALUES 
+(N'عرض رمضان - فرع القاهرة', 1, 1, 50),
+(N'عرض رمضان - فرع الجيزة', 1, 2, 30),
+(N'عرض الصيف - فرع الاسكندرية', 2, 3, 40),
+(N'عرض العيلة - فرع القاهرة', 3, 1, 20);
+
+-- صور العروض
+INSERT INTO ImageOffers (OfferId, ImageUrl)
+VALUES 
+(1, 'https://example.com/images/ramadan_offer1.jpg'),
+(1, 'https://example.com/images/ramadan_offer2.jpg'),
+(2, 'https://example.com/images/summer_offer.jpg'),
+(3, 'https://example.com/images/family_offer.jpg');
+-----------
+-- Insert Customers
+INSERT INTO Customers (Name, Title, Phone, Email, BranchId)
+VALUES 
+('Ahmed Ali', 'Mr.', '01012345678', 'ahmed.ali@example.com', 1),
+('Sara Mohamed', 'Ms.', '01098765432', 'sara.mohamed@example.com', 1),
+('Omar Hassan', 'Dr.', '01122334455', 'omar.hassan@example.com', 2),
+('Mona Samir', 'Mrs.', '01233445566', 'mona.samir@example.com', 2),
+('Youssef Adel', 'Mr.', '01566778899', 'youssef.adel@example.com', 3),
+('Laila Nabil', 'Ms.', '01044556677', 'laila.nabil@example.com', 3);
+
+
 -- تأكد من البيانات
 SELECT * FROM Cities;
 SELECT * FROM Branches;
@@ -77,3 +114,26 @@ JOIN Cities c ON b.CityId = c.Id;
 SELECT *
 FROM Branches
 WHERE CityId = 1;
+---------------
+
+SELECT o.Name AS OfferName, b.Name AS BranchName, os.Quantity
+FROM OfferStocks os
+JOIN Offers o ON os.OfferId = o.Id
+JOIN Branches b ON os.BranchId = b.Id;
+
+SELECT o.Name, o.Des, i.ImageUrl
+FROM Offers o
+JOIN ImageOffers i ON o.Id = i.OfferId
+WHERE o.Name = N'عرض رمضان';
+
+SELECT o.Name, os.Quantity
+FROM OfferStocks os
+JOIN Offers o ON os.OfferId = o.Id
+JOIN Branches b ON os.BranchId = b.Id
+WHERE b.Id = 1
+
+SELECT o.Name, os.Quantity
+FROM OfferStocks os
+JOIN Offers o ON os.OfferId = o.Id
+JOIN Branches b ON os.BranchId = b.Id
+WHERE b.Name = N'فرع القاهرة';
