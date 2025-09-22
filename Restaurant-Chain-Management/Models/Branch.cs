@@ -12,6 +12,9 @@
         public int? ManagerId { get; set; }
         public Employee? Manager { get; set; }
 
+        public int StockId { get; set; }
+        public Stock Stock { get; set; }
+
         public ICollection<Employee> Employees { get; set; } = new List<Employee>();
     }
 }
