@@ -16,6 +16,11 @@ namespace Restaurant_Chain_Management.Models
 
         public DbSet<StockProduct> StockProducts { get; set; }
 
+        public DbSet<Offer> Offers { get; set; }
+        public DbSet<OfferStock> OfferStocks { get; set; }
+        public DbSet<ImageOffer> ImageOffers { get; set; }
+
+
 
 
         public AppDbContext() : base()

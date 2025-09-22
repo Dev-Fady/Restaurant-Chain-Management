@@ -16,5 +16,7 @@
         public Stock Stock { get; set; }
 
         public ICollection<Employee> Employees { get; set; } = new List<Employee>();
+        public ICollection<OfferStock> OfferStocks { get; set; } = new List<OfferStock>();
+
     }
 }
