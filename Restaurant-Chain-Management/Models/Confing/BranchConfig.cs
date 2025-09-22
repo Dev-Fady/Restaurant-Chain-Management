@@ -28,9 +28,16 @@ namespace Restaurant_Chain_Management.Models.Confing
                 .HasForeignKey(e=>e.BranchId)
                 .OnDelete(DeleteBehavior.SetNull);
 
+            builder.HasOne(b => b.Stock)
+               .WithOne(s => s.Branch)
+               .HasForeignKey<Stock>(s => s.BranchId)
+               .OnDelete(DeleteBehavior.Cascade);
+
             // Indexes
             builder.HasIndex(b => b.CityId);
             builder.HasIndex(b => b.ManagerId);
+            builder.HasIndex(b => new { b.CityId, b.Name }).IsUnique();
+
         }
     }
 }
