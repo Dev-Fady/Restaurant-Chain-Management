@@ -18,5 +18,7 @@
         public ICollection<Employee> Employees { get; set; } = new List<Employee>();
         public ICollection<OfferStock> OfferStocks { get; set; } = new List<OfferStock>();
 
+        public ICollection<Customer> Customers { get; set; } = new List<Customer>();
+
     }
 }
