@@ -12,9 +12,12 @@ namespace Restaurant_Chain_Management.Models.Confing
             builder.Property(x => x.Name)
                 .IsRequired()
                 .HasMaxLength(100);
-            builder.Property(x => x.Title)
+            builder.Property(x => x.Address)
                 .IsRequired()
                 .HasMaxLength(100);
+            builder.Property(x => x.Salary)
+                 .IsRequired()
+                .HasColumnType("decimal(18,2)");
 
             builder.Property(x => x.Role)
                 .IsRequired()
