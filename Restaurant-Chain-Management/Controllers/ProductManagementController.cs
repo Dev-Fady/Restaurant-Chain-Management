@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Restaurant_Chain_Management.DTOs;
 using Restaurant_Chain_Management.Models;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Restaurant_Chain_Management.Controllers
 {
@@ -128,13 +129,13 @@ namespace Restaurant_Chain_Management.Controllers
             var product = await context.Products.FindAsync(id);
             if (product == null) return NotFound("Product not found");
 
-            // ✅ تحديث البيانات فقط لو مبعوتة
+            //Update data only if sent
             product.Name = !string.IsNullOrWhiteSpace(dto.Name) ? dto.Name : product.Name;
             product.Des = !string.IsNullOrWhiteSpace(dto.Des) ? dto.Des : product.Des;
             product.Price = dto.Price.HasValue ? dto.Price.Value : product.Price;
             product.IsFavorite = dto.IsAvailable.HasValue ? dto.IsAvailable.Value : product.IsFavorite;
 
-            // ✅ تحديث المخزون لو StockId و Quantity موجودين
+            //  Update inventory if StockId and Quantity are present
             if (dto.StockId.HasValue && dto.Quantity.HasValue)
             {
                 var stockProduct = await context.StockProducts
@@ -146,7 +147,7 @@ namespace Restaurant_Chain_Management.Controllers
                 }
             }
 
-            // ✅ تحديث المفضلة
+            //  Update Favorites
             var favorite = await context.FavoriteProducts.FirstOrDefaultAsync(f => f.ProductId == id);
 
             if (product.IsFavorite)
@@ -169,7 +170,7 @@ namespace Restaurant_Chain_Management.Controllers
                 }
             }
 
-            // ✅ تحديث الصور (لو مبعوتة صور جديدة)
+            //  Update photos (if new photos are sent)
             if (dto.Images != null && dto.Images.Count > 0)
             {
                 // احذف القديمة
@@ -235,10 +236,10 @@ namespace Restaurant_Chain_Management.Controllers
 
             if (product == null) return NotFound("Product not found");
 
-            // امسح العلاقات الأول (StockProduct)
+            // Clear the first relationship (StockProduct)
             context.StockProducts.RemoveRange(product.StockProducts);
 
-            // بعدين المنتج نفسه
+            //Then the product itself
             context.Products.Remove(product);
             await context.SaveChangesAsync();
 
