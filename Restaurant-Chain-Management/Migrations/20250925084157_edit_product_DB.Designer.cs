@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Restaurant_Chain_Management.Models;
 
@@ -11,9 +12,11 @@ using Restaurant_Chain_Management.Models;
 namespace Restaurant_Chain_Management.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250925084157_edit_product_DB")]
+    partial class edit_product_DB
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -275,16 +278,11 @@ namespace Restaurant_Chain_Management.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("stockId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");
 
                     b.HasIndex("UserId");
-
-                    b.HasIndex("stockId");
 
                     b.ToTable("CartItems");
                 });
@@ -315,14 +313,6 @@ namespace Restaurant_Chain_Management.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int>("BranchId")
                         .HasColumnType("int");
 
@@ -341,9 +331,12 @@ namespace Restaurant_Chain_Management.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.HasKey("Id");
+                    b.Property<string>("title")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasKey("Id");
 
                     b.HasIndex("BranchId");
 
@@ -409,17 +402,11 @@ namespace Restaurant_Chain_Management.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("stockId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");
 
-                    b.HasIndex("stockId");
-
-                    b.HasIndex("UserId", "ProductId", "stockId")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
                     b.ToTable("FavoriteProducts");
                 });
@@ -544,11 +531,6 @@ namespace Restaurant_Chain_Management.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<string>("GlobalCode")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -558,9 +540,6 @@ namespace Restaurant_Chain_Management.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("GlobalCode")
-                        .IsUnique();
 
                     b.ToTable("Products");
                 });
@@ -685,37 +664,23 @@ namespace Restaurant_Chain_Management.Migrations
                         .IsRequired();
 
                     b.HasOne("Restaurant_Chain_Management.Models.ApplicationUser", "User")
-                        .WithMany("CartItems")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Restaurant_Chain_Management.Models.Stock", "stock")
                         .WithMany()
-                        .HasForeignKey("stockId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Product");
 
                     b.Navigation("User");
-
-                    b.Navigation("stock");
                 });
 
             modelBuilder.Entity("Restaurant_Chain_Management.Models.Customer", b =>
                 {
-                    b.HasOne("Restaurant_Chain_Management.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId");
-
                     b.HasOne("Restaurant_Chain_Management.Models.Branch", "Branch")
                         .WithMany("Customers")
                         .HasForeignKey("BranchId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("ApplicationUser");
 
                     b.Navigation("Branch");
                 });
@@ -745,22 +710,14 @@ namespace Restaurant_Chain_Management.Migrations
                         .IsRequired();
 
                     b.HasOne("Restaurant_Chain_Management.Models.ApplicationUser", "User")
-                        .WithMany("FavoriteProducts")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Restaurant_Chain_Management.Models.Stock", "stock")
                         .WithMany()
-                        .HasForeignKey("stockId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Product");
 
                     b.Navigation("User");
-
-                    b.Navigation("stock");
                 });
 
             modelBuilder.Entity("Restaurant_Chain_Management.Models.ImageOffer", b =>
@@ -832,13 +789,6 @@ namespace Restaurant_Chain_Management.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("Stock");
-                });
-
-            modelBuilder.Entity("Restaurant_Chain_Management.Models.ApplicationUser", b =>
-                {
-                    b.Navigation("CartItems");
-
-                    b.Navigation("FavoriteProducts");
                 });
 
             modelBuilder.Entity("Restaurant_Chain_Management.Models.Branch", b =>
