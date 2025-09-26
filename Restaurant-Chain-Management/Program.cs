@@ -9,12 +9,13 @@ using Restaurant_Chain_Management.Models;
 using Restaurant_Chain_Management.Models.Data;
 using Restaurant_Chain_Management.Services;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Restaurant_Chain_Management
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -138,6 +139,15 @@ namespace Restaurant_Chain_Management
             //    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             //    await DbInitializer.SeedAsync(db);
             //}
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+                var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+                await DbSeeder.SeedAdminAsync(userManager, roleManager);
+            }
+
 
 
             // Configure the HTTP request pipeline.
