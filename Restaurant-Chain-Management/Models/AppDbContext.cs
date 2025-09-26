@@ -23,6 +23,8 @@ namespace Restaurant_Chain_Management.Models
 
         public DbSet<Customer> Customers { get; set; }
 
+        public DbSet<CartItem> CartItems { get; set; }
+
         public AppDbContext() : base()
         { 
         }
@@ -36,6 +38,9 @@ namespace Restaurant_Chain_Management.Models
 
             modelBuilder.ApplyConfigurationsFromAssembly(
              typeof(CityConfig).Assembly);
+
+            modelBuilder.ApplyConfiguration(new FavoriteProductConfig());
+
         }
     }
 }

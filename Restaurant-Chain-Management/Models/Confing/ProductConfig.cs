@@ -8,6 +8,13 @@ namespace Restaurant_Chain_Management.Models.Confing
         public void Configure(EntityTypeBuilder<Product> builder)
         {
             builder.HasKey(x => x.Id);
+           
+            builder.Property(x => x.GlobalCode)
+                   .IsRequired()
+                   .HasMaxLength(50);
+
+            builder.HasIndex(x => x.GlobalCode)
+                   .IsUnique();
 
             builder.Property(x => x.Name)
                 .IsRequired()
@@ -15,11 +22,13 @@ namespace Restaurant_Chain_Management.Models.Confing
             builder.Property(x => x.Price)
                 .IsRequired()
                 .HasColumnType("decimal(18,2)");
+           
             builder.Property(x => x.Des)
                 .HasMaxLength(500);
-            builder.Property(x => x.IsFavorite)
-                .IsRequired()
-                .HasDefaultValue(false);
+           
+            //builder.Property(x => x.IsFavorite)
+            //    .IsRequired()
+            //    .HasDefaultValue(false);
 
             // Images relationship
             builder.HasMany(p => p.ImageProducts)

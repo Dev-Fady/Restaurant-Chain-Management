@@ -13,7 +13,7 @@ namespace Restaurant_Chain_Management.Models.Confing
                    .IsRequired()
                    .HasMaxLength(100);
 
-            builder.Property(c => c.title)
+            builder.Property(c => c.Address)
                    .HasMaxLength(50);
 
             builder.Property(c => c.Phone)

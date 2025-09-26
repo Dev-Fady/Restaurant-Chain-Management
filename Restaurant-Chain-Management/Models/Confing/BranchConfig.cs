@@ -12,20 +12,20 @@ namespace Restaurant_Chain_Management.Models.Confing
             builder.Property(x => x.Name)
                 .IsRequired()
                 .HasMaxLength(100);
-           
-          builder.HasOne(b => b.City)
-                   .WithMany()
-                   .HasForeignKey(b => b.CityId)
-                   .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasOne(e=>e.Manager)
+            builder.HasOne(b => b.City)
+                     .WithMany()
+                     .HasForeignKey(b => b.CityId)
+                     .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(e => e.Manager)
                 .WithMany()
-                .HasForeignKey(e=>e.ManagerId)
+                .HasForeignKey(e => e.ManagerId)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            builder.HasMany(b=>b.Employees)
-                .WithOne(e=>e.Branch)
-                .HasForeignKey(e=>e.BranchId)
+            builder.HasMany(b => b.Employees)
+                .WithOne(e => e.Branch)
+                .HasForeignKey(e => e.BranchId)
                 .OnDelete(DeleteBehavior.SetNull);
 
             builder.HasOne(b => b.Stock)
