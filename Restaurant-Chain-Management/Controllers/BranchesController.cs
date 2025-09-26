@@ -12,7 +12,7 @@ namespace Restaurant_Chain_Management.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "GeneralManager")]
+    [Authorize(Roles = "GeneralManager,Admin")]
     public class BranchesController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -129,25 +129,25 @@ namespace Restaurant_Chain_Management.Controllers
                 });
             }
 
-            Employee? manager = null;
-            if (branch.ManagerId.HasValue)
-            {
-                manager = await _context.Employees.FindAsync(branch.ManagerId.Value);
-                if (manager == null || manager.Role != EmployeeRole.BranchManager)
-                {
-                    return BadRequest(new GeneralResponse
-                    {
-                        IsSuccess = false,
-                        Data = "Invalid manager."
-                    });
-                }
-            }
+            //Employee? manager = null;
+            //if (branch.ManagerId.HasValue)
+            //{
+            //    manager = await _context.Employees.FindAsync(branch.ManagerId.Value);
+            //    if (manager == null || manager.Role != EmployeeRole.BranchManager)
+            //    {
+            //        return BadRequest(new GeneralResponse
+            //        {
+            //            IsSuccess = false,
+            //            Data = "Invalid manager."
+            //        });
+            //    }
+            //}
 
             var newBranch = new Branch
             {
                 Name = branch.Name,
                 CityId = branch.CityId,
-                ManagerId = branch.ManagerId,
+                //ManagerId = branch.ManagerId,
             };
 
             _context.Branches.Add(newBranch);
@@ -175,7 +175,7 @@ namespace Restaurant_Chain_Management.Controllers
                     newBranch.Id,
                     newBranch.Name,
                     City = city.Name,
-                    Manager = manager?.Name,
+                    //Manager = manager?.Name,
                     Stock = stock.Name
                 }
             });
@@ -327,19 +327,19 @@ namespace Restaurant_Chain_Management.Controllers
                 branch.CityId = branchDto.CityId;
             }
 
-            if (branchDto.ManagerId.HasValue && branchDto.ManagerId.Value > 0)
-            {
-                var manager = await _context.Employees.FindAsync(branchDto.ManagerId.Value);
-                if (manager == null || manager.Role != EmployeeRole.BranchManager)
-                {
-                    return BadRequest(new GeneralResponse
-                    {
-                        IsSuccess = false,
-                        Data = "Invalid manager."
-                    });
-                }
-                branch.ManagerId = branchDto.ManagerId;
-            }
+            //if (branchDto.ManagerId.HasValue && branchDto.ManagerId.Value > 0)
+            //{
+            //    var manager = await _context.Employees.FindAsync(branchDto.ManagerId.Value);
+            //    if (manager == null || manager.Role != EmployeeRole.BranchManager)
+            //    {
+            //        return BadRequest(new GeneralResponse
+            //        {
+            //            IsSuccess = false,
+            //            Data = "Invalid manager."
+            //        });
+            //    }
+            //    branch.ManagerId = branchDto.ManagerId;
+            //}
 
             await _context.SaveChangesAsync();
 

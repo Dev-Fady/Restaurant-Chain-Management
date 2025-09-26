@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Restaurant_Chain_Management.DTOs;
 using Restaurant_Chain_Management.Models;
+using Restaurant_Chain_Management.Models.Enums;
 using Restaurant_Chain_Management.Services;
 
 namespace Restaurant_Chain_Management.Controllers
@@ -86,6 +87,16 @@ namespace Restaurant_Chain_Management.Controllers
 
             context.Employees.Add(employee);
             await context.SaveChangesAsync();
+
+            if (dto.Role == EmployeeRole.BranchManager)
+            {
+                var branch = await context.Branches.FindAsync(dto.BranchId);
+                if (branch != null)
+                {
+                    branch.ManagerId = employee.Id;
+                    await context.SaveChangesAsync();
+                }
+            }
 
             // 6- Return success response
             return Ok(new

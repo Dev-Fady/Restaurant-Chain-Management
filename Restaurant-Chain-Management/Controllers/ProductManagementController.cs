@@ -10,7 +10,7 @@ namespace Restaurant_Chain_Management.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "GeneralManager,BranchManager")]
+    [Authorize(Roles = "GeneralManager,BranchManager,Admin")]
     public class ProductManagementController : ControllerBase
     {
         private readonly AppDbContext context;
@@ -35,7 +35,7 @@ namespace Restaurant_Chain_Management.Controllers
                     sp.Product.Name,
                     sp.Product.Price,
                     Images = sp.Product.ImageProducts.Select(ip => ip.ImageUrl),
-                    sp.Product.IsFavorite,
+                    //sp.Product.IsFavorite,
                     sp.Quantity,
                     ManagerName = b.Manager != null ? b.Manager.Name : null
                 }))
@@ -66,7 +66,7 @@ namespace Restaurant_Chain_Management.Controllers
                 Name = dto.Name,
                 Des = dto.Des,
                 Price = dto.Price,
-                IsFavorite = dto.IsAvailable
+                //IsFavorite = dto.IsAvailable
             };
 
             await context.Products.AddAsync(product);
@@ -133,7 +133,7 @@ namespace Restaurant_Chain_Management.Controllers
             product.Name = !string.IsNullOrWhiteSpace(dto.Name) ? dto.Name : product.Name;
             product.Des = !string.IsNullOrWhiteSpace(dto.Des) ? dto.Des : product.Des;
             product.Price = dto.Price.HasValue ? dto.Price.Value : product.Price;
-            product.IsFavorite = dto.IsAvailable.HasValue ? dto.IsAvailable.Value : product.IsFavorite;
+            //product.IsFavorite = dto.IsAvailable.HasValue ? dto.IsAvailable.Value : product.IsFavorite;
 
             //  Update inventory if StockId and Quantity are present
             if (dto.StockId.HasValue && dto.Quantity.HasValue)
@@ -150,25 +150,25 @@ namespace Restaurant_Chain_Management.Controllers
             //  Update Favorites
             var favorite = await context.FavoriteProducts.FirstOrDefaultAsync(f => f.ProductId == id);
 
-            if (product.IsFavorite)
-            {
-                if (favorite == null)
-                {
-                    var favProduct = new FavoriteProduct
-                    {
-                        ProductId = id,
-                        AddedDate = DateTime.Now
-                    };
-                    await context.FavoriteProducts.AddAsync(favProduct);
-                }
-            }
-            else
-            {
-                if (favorite != null)
-                {
-                    context.FavoriteProducts.Remove(favorite);
-                }
-            }
+            //if (product.IsFavorite)
+            //{
+            //    if (favorite == null)
+            //    {
+            //        var favProduct = new FavoriteProduct
+            //        {
+            //            ProductId = id,
+            //            AddedDate = DateTime.Now
+            //        };
+            //        await context.FavoriteProducts.AddAsync(favProduct);
+            //    }
+            //}
+            //else
+            //{
+            //    if (favorite != null)
+            //    {
+            //        context.FavoriteProducts.Remove(favorite);
+            //    }
+            //}
 
             //  Update photos (if new photos are sent)
             if (dto.Images != null && dto.Images.Count > 0)
@@ -220,7 +220,7 @@ namespace Restaurant_Chain_Management.Controllers
                     product.Name,
                     product.Des,
                     product.Price,
-                    product.IsFavorite,
+                    //product.IsFavorite,
                     dto.Quantity
                 }
             });
