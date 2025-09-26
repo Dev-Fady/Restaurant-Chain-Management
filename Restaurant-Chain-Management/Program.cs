@@ -103,7 +103,7 @@ namespace Restaurant_Chain_Management
                 {
                     Version = "v1",
                     Title = "ASP.NET 8 Web API",
-                    Description = " ITI Projrcy"
+                    Description = " Restaurant Chain Management Projrcy"
                 });
                 // To Enable authorization using Swagger (JWT)    
                 swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
@@ -151,11 +151,11 @@ namespace Restaurant_Chain_Management
 
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
+            //if (app.Environment.IsDevelopment())
+            //{
                 app.UseSwagger();
                 app.UseSwaggerUI();
-            }
+            //}
 
             app.UseStaticFiles();
 
