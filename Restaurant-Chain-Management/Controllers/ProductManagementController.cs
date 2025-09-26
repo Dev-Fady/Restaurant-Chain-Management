@@ -67,6 +67,7 @@ namespace Restaurant_Chain_Management.Controllers
                 Des = dto.Des,
                 Price = dto.Price,
                 //IsFavorite = dto.IsAvailable
+                GlobalCode = Guid.NewGuid().ToString("N")
             };
 
             await context.Products.AddAsync(product);
@@ -148,7 +149,7 @@ namespace Restaurant_Chain_Management.Controllers
             }
 
             //  Update Favorites
-            var favorite = await context.FavoriteProducts.FirstOrDefaultAsync(f => f.ProductId == id);
+            //var favorite = await context.FavoriteProducts.FirstOrDefaultAsync(f => f.ProductId == id);
 
             //if (product.IsFavorite)
             //{
